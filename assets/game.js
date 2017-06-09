@@ -33,8 +33,7 @@ var p1Losses = 0;
 //     wins: 0
 // })
 
-//wrap this in a function
-//have function call on click
+
 
 function myFunction(){
     database.ref("/players/1").on("value", function (snapshot) {
