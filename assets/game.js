@@ -12,11 +12,19 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-//Initial values
-var player1 = "";
-var player2 = "";
-var p1Wins = 0;
-var p1Losses = 0;
+// Initial values
+var player1 = {
+    name: "",
+    losess: 0,
+    wins: 0
+
+}
+var player2 = {
+    name: "",
+    losess: 0,
+    wins: 0
+}
+
 
 
 // var turn = database.ref("/turn");
@@ -35,19 +43,7 @@ var p1Losses = 0;
 
 
 
-function myFunction(){
-    database.ref("/players/1").on("value", function (snapshot) {
-        console.log(snapshot.child("player1").exists());
-        if(snapshot.child("player1").exists()){
 
-        player1 = snapshot.val().player1
-        $("#display-player1").html(snapshot.val().player1)
-        }
-    });
-}
-
-
-myFunction();
 
 // database.ref("/players/2").on("value", function (snapshot) {
 
@@ -58,21 +54,69 @@ myFunction();
 
 // Whenever a player login
 
+
 $("#login").on("click", function (event) {
     event.preventDefault();
     var playerName = $("#login-name").val().trim();
 
     database.ref("/players/1").push({
-        player1: playerName,
+
+        name: playerName,
+        losses: 0,
+        wins: 0
+
     });
 
-    //    database.ref("/players/2").push({
-    //     player2: playerName,
-    // });
+    function playerOne() {
+        database.ref("/players/1").on("child_added", function (childSnapshot) {
+            player1 = childSnapshot.val().name;
+            console.log(player1);
+            $("#display-player1").html(childSnapshot.val().name);
 
-    console.log("this is player 1")
-    console.log("this is player 2")
+            console.log(childSnapshot.val().name);
+
+        });
+    }
+
+
+  
+  playerOne();
+
 });
+
+
+
+$("#login2").on("click", function (event) {
+    event.preventDefault();
+    var playerName2 = $("#login-name2").val().trim();
+
+    database.ref("/players/2").push({
+
+        name: playerName2,
+        losses: 0,
+        wins: 0
+
+    });
+
+    function playerTwo() {
+        database.ref("/players/2").on("child_added", function (childSnapshot) {
+            player2 = childSnapshot.val().name;
+            console.log(player2)
+            $("#player2").html(childSnapshot.val().name)
+
+            console.log(childSnapshot.val().name);
+
+        });
+    }
+
+
+  
+  playerTwo();
+
+});
+
+
+
 
 
 
